@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>{{ _('Welcome') }}, {{ current_user.email }}!</h1>
+<h3>{{ _('Scholarship Opportunities') }}</h3>
+<ul class="list-group">
+  {% for sch in scholarships %}
+    <li class="list-group-item">
+      <h5>{{ sch.title }}</h5>
+      <p>{{ sch.description }}</p>
+    </li>
+  {% else %}
+    <li class="list-group-item">{{ _('No scholarships found for your stage.') }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

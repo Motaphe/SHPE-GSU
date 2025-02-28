@@ -1,0 +1,19 @@
+<!-- templates/posts.html -->
+{% extends "base.html" %}
+{% block title %}{{ _('Community Posts') }}{% endblock %}
+{% block content %}
+  <h1>{{ _('Community Posts') }}</h1>
+  <form method="POST">
+    <div class="form-group">
+      <textarea name="content" class="form-control" placeholder="{{ _('Share something...') }}" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">{{ _('Post') }}</button>
+  </form>
+  <hr>
+  <ul>
+    {% for post in posts %}
+      <li><strong>{{ post.user.email }}:</strong> {{ post.content }} <small>({{ post.timestamp }})</small></li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">{{ _('Back to Dashboard') }}</a>
+{% endblock %}

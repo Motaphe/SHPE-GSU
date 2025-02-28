@@ -1,0 +1,34 @@
+<!-- templates/register.html -->
+{% extends "base.html" %}
+{% block title %}{{ _('Register') }}{% endblock %}
+{% block content %}
+  <h1>{{ _('Register') }}</h1>
+  <form method="POST">
+    <div class="form-group">
+      <label for="email">{{ _('Email') }}</label>
+      <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="password">{{ _('Password') }}</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="school_stage">{{ _('School Stage') }}</label>
+      <select name="school_stage" class="form-control">
+        <option value="highschool senior">{{ _('High School Senior') }}</option>
+        <option value="hs graduate">{{ _('High School Graduate') }}</option>
+        <option value="college freshman">{{ _('College Freshman') }}</option>
+        <!-- Add more options as needed -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="preferred_language">{{ _('Preferred Language') }}</label>
+      <select name="preferred_language" class="form-control">
+        <option value="en">{{ _('English') }}</option>
+        <option value="es">{{ _('Spanish') }}</option>
+        <option value="indigenous">{{ _('Indigenous') }}</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">{{ _('Register') }}</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,8 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+{% block title %}{{ _('Welcome') }}{% endblock %}
+{% block content %}
+  <h1>{{ _('Welcome to the Hispanic College Prep Community') }}</h1>
+  <a href="{{ url_for('auth.register') }}" class="btn btn-primary">{{ _('Register') }}</a>
+  <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">{{ _('Login') }}</a>
+{% endblock %}
