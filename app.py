@@ -46,7 +46,7 @@ def register():
         # Simplified – hash passwords in production!
         email = request.form['email']
         password = request.form['password']
-        stage = request.form['stage']
+        stage = request.form.get('school_stage')
         language = request.form.get('language', 'en')
         if User.query.filter_by(email=email).first():
             flash(gettext('Email already registered.'), 'danger')
