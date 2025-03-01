@@ -1,9 +1,10 @@
 # auth.py
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from extensions import db
-from models import User, Post
+from models import User, Post, Scholarship
 from flask_login import login_user, logout_user, login_required
 from flask_babel import gettext
+from utils.scraper import scrape_scholarships_for_stage
 
 auth = Blueprint('auth', __name__)
 
@@ -15,6 +16,23 @@ def login():
         user = User.query.filter_by(email=email, password=password).first()
         if user:
             login_user(user)
+
+            # 1. Run the scraper based on the user's stage
+            stage = user.stage  # e.g., "highschool senior"
+            results = scrape_scholarships_for_stage(stage)
+
+            # 2. Store results in the DB if they're not already there
+            for item in results:
+                existing = Scholarship.query.filter_by(title=item['title'], stage=stage).first()
+                if not existing:
+                    new_sch = Scholarship(
+                        title=item['title'],
+                        stage=stage,
+                        description=item['description']
+                    )
+                    db.session.add(new_sch)
+            db.session.commit()
+
             return redirect(url_for('dashboard'))
         flash(gettext('Invalid credentials.'), 'danger')
     return render_template('login.html')
@@ -35,6 +53,7 @@ def register():
         return redirect(url_for('dashboard'))
     return render_template('register.html')
 
+'''
 @auth.route('/post', methods=['POST'])
 @login_required
 def create_post():
@@ -44,6 +63,7 @@ def create_post():
         db.session.add(post)
         db.session.commit()
     return redirect(url_for('dashboard'))
+'''
 
 @auth.route('/logout')
 @login_required

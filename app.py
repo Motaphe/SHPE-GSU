@@ -6,6 +6,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_babel import Babel, gettext
 from auth import auth as auth_blueprint  # Import the auth blueprint
 
+from utils.scraper import scrape_scholarships_for_stage
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -89,6 +91,29 @@ def dashboard():
                            internships=internships,
                            university_preps=university_preps)
 
+
+@app.route('/scrape_scholarships')
+def scrape_scholarships():
+    """
+    Example route to scrape scholarships for multiple stages, store them in the DB.
+    You only need to run this once or as needed (not on every dashboard load).
+    """
+    stages = ["highschool senior", "hs graduate", "college freshman"]
+    for stage in stages:
+        results = scrape_scholarships_for_stage(stage)
+        for item in results:
+            # Check if scholarship already exists to avoid duplicates
+            existing = Scholarship.query.filter_by(title=item["title"], stage=stage).first()
+            if not existing:
+                new_sch = Scholarship(
+                    title=item["title"],
+                    stage=stage,
+                    description=item.get("description", ""),
+                    url=item.get('url', "")
+                )
+                db.session.add(new_sch)
+    db.session.commit()
+    return "Scraping done! Scholarships stored in DB."
 
 @app.route('/set_language/<lang>')
 def set_language(lang):

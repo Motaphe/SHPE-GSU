@@ -1,19 +1,23 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <h1>Welcome, {{ current_user.email }}!</h1>
 
 <h2>Scholarship Opportunities</h2>
-<ul class="list-group">
-  {% for sch in scholarships %}
-    <li class="list-group-item">
-      <h5>{{ sch.title }}</h5>
-      <p>{{ sch.description }}</p>
-    </li>
-  {% else %}
-    <li class="list-group-item">No scholarships available for your stage.</li>
-  {% endfor %}
-</ul>
+{% if scholarships %}
+  <ul class="list-group">
+    {% for sch in scholarships %}
+      <li class="list-group-item">
+        <a href="{{ sch.url }}" target="_blank">
+          <h5>{{ sch.title }}</h5>
+        </a>
+        <p>{{ sch.description }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="alert alert-info">No scholarships available for your stage.</div>
+{% endif %}
 
 <h2>Organizations & Events</h2>
 <div class="row">
@@ -48,23 +52,8 @@
     </li>
   {% endfor %}
 </ul>
+
+
+
 {% endblock %}
-
-<h2>Community Feed</h2>
-<form method="POST" action="{{ url_for('create_post') }}">
-  <div class="form-group">
-    <textarea name="content" class="form-control" placeholder="Share a resource, ask a question, or post a meme..."></textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Post</button>
-</form>
-
-{% for post in posts %}
-<div class="card mt-3">
-  <div class="card-body">
-    <p>{{ post.content }}</p>
-    <small>Posted by {{ post.user.email }} at {{ post.timestamp }}</small>
-    <!-- Include upvote button and comments section here -->
-  </div>
-</div>
-{% endfor %}
 

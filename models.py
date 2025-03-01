@@ -16,6 +16,7 @@ class Scholarship(db.Model):
     title = db.Column(db.String(200), nullable=False)
     stage = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text)
+    url = db.Column(db.String(200))  # New field for the scholarship link
 
 class Post(db.Model):
     __tablename__ = 'posts'

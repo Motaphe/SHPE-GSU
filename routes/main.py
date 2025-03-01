@@ -22,6 +22,7 @@ def dashboard():
     return render_template('dashboard.html', scholarships=scholarships,
                            organizations=organizations, internships=internships, university_recs=university_recs)
 
+'''
 @main_bp.route('/posts', methods=['GET', 'POST'])
 @login_required
 def posts():
@@ -34,3 +35,4 @@ def posts():
         return redirect(url_for('main.posts'))
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('posts.html', posts=posts)
+'''
