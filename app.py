@@ -1,10 +1,10 @@
 # app.py
 from flask import Flask, render_template, redirect, url_for, request, flash, session
 from config import Config
-from extensions import db  # Import the db instance from extensions
+from extensions import db  
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_babel import Babel, gettext
-from auth import auth as auth_blueprint  # Import the auth blueprint
+from auth import auth as auth_blueprint  
 
 from utils.scraper import scrape_scholarships_for_stage
 

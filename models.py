@@ -1,4 +1,3 @@
-# models.py
 from extensions import db
 from flask_login import UserMixin
 
