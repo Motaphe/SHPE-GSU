@@ -1,7 +1,7 @@
 # auth.py
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from extensions import db
-from models import User
+from models import User, Post
 from flask_login import login_user, logout_user, login_required
 from flask_babel import gettext
 
@@ -34,6 +34,16 @@ def register():
         login_user(user)
         return redirect(url_for('dashboard'))
     return render_template('register.html')
+
+@auth.route('/post', methods=['POST'])
+@login_required
+def create_post():
+    content = request.form.get('content')
+    if content:
+        post = Post(content=content, user_id=current_user.id)
+        db.session.add(post)
+        db.session.commit()
+    return redirect(url_for('dashboard'))
 
 @auth.route('/logout')
 @login_required

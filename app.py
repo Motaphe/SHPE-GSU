@@ -20,7 +20,7 @@ app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
 # Import models after initializing db to avoid circular import issues
 with app.app_context():
-    from models import User, Scholarship, Post
+    from models import User, Scholarship, Post, Organization, Event, Internship, UniversityPrep, Vote, Comment
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -75,10 +75,20 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    # Query personalized recommendations – for demo purposes filter by user's stage
-    scholarships = Scholarship.query.filter_by(stage=current_user.stage).all()
-    # In a complete MVP, add events, internships, etc.
-    return render_template('dashboard.html', scholarships=scholarships)
+    user_stage = current_user.stage
+    scholarships = Scholarship.query.filter_by(stage=user_stage).all()
+    organizations = Organization.query.filter_by(stage=user_stage).all()
+    events = Event.query.filter_by(stage=user_stage).all()
+    internships = Internship.query.filter_by(stage=user_stage).all()
+    university_preps = UniversityPrep.query.all()  # add filtering based on location/majors if needed
+
+    return render_template('dashboard.html',
+                           scholarships=scholarships,
+                           organizations=organizations,
+                           events=events,
+                           internships=internships,
+                           university_preps=university_preps)
+
 
 @app.route('/set_language/<lang>')
 def set_language(lang):
