@@ -43,7 +43,7 @@ def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        stage = request.form.get('stage')
+        stage = request.form.get('stage')  # make sure this matches your form field name
         if User.query.filter_by(email=email).first():
             flash(gettext('Email already registered.'), 'danger')
             return redirect(url_for('auth.register'))
@@ -51,8 +51,23 @@ def register():
         db.session.add(user)
         db.session.commit()
         login_user(user)
+
+        results = scrape_scholarships_for_stage(stage)
+        for item in results:
+            existing = Scholarship.query.filter_by(title=item['title'], stage=stage).first()
+            if not existing:
+                new_sch = Scholarship(
+                    title=item['title'],
+                    stage=stage,
+                    description=item['description'],
+                    url=item['url']  # ensure your model has a URL field
+                )
+                db.session.add(new_sch)
+        db.session.commit()
+
         return redirect(url_for('dashboard'))
     return render_template('register.html')
+
 
 '''
 @auth.route('/post', methods=['POST'])
