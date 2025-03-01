@@ -28,7 +28,8 @@ def login():
                     new_sch = Scholarship(
                         title=item['title'],
                         stage=stage,
-                        description=item['description']
+                        description=item['description'],
+                        url=item['url']
                     )
                     db.session.add(new_sch)
             db.session.commit()
